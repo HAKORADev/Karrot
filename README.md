@@ -31,7 +31,7 @@ Like a parrot that repeats words, Karrot captures text from your screen or clipb
 Use when text cannot be selected/copied (images, videos, PDFs, etc.)
 
 ```
-Ctrl+Alt+N → python /path/to/karrot.py
+hotkey1 → python /path/to/karrot.py
 ```
 1. Spectacle opens for region selection
 2. OCR extracts text from screenshot
@@ -41,7 +41,7 @@ Ctrl+Alt+N → python /path/to/karrot.py
 Use when text is selectable - perfect for long articles!
 
 ```
-Ctrl+Alt+M → python /path/to/karrot.py "$(wl-paste)"
+hotkey2 → python /path/to/karrot.py "$(wl-paste)"
 ```
 1. Reads text from clipboard
 2. Skips OCR entirely
@@ -90,8 +90,8 @@ voice_prompt = neutral, clear, professional narration voice
 
 | Name | Shortcut | Command |
 |------|----------|---------|
-| Karrot OCR | `Ctrl+Alt+N` | `python /path/to/Karrot/src/karrot.py` |
-| Karrot Text | `Ctrl+Alt+M` | `python /path/to/Karrot/src/karrot.py "$(wl-paste)"` |
+| Karrot OCR | `hotkey1` | `python /path/to/Karrot/src/karrot.py` |
+| Karrot Text | `hotkey2` | `python /path/to/Karrot/src/karrot.py "$(wl-paste)"` |
 
 ---
 
@@ -99,7 +99,7 @@ voice_prompt = neutral, clear, professional narration voice
 
 ### Scenario 1: Text in an Image
 ```
-1. Press Ctrl+Alt+N
+1. Press hotkey1
 2. Select the region with Spectacle
 3. Listen to the narrated text
 ```
@@ -107,14 +107,14 @@ voice_prompt = neutral, clear, professional narration voice
 ### Scenario 2: Long Article in Browser
 ```
 1. Select and copy the article text (Ctrl+C)
-2. Press Ctrl+Alt+M
+2. Press hhotkey2
 3. Listen to the entire article!
 ```
 
 ### Scenario 3: PDF or Document
 ```
-If text is selectable: Copy → Ctrl+Alt+M
-If text is NOT selectable: Ctrl+Alt+N → Select region
+If text is selectable: Copy → hotkey1
+If text is NOT selectable: hotkey2 → Select region
 ```
 
 ---
