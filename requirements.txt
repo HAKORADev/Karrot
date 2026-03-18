@@ -1,0 +1,15 @@
+# Karrot Dependencies
+# KDE Desktop Environment Narrator
+
+# OCR Engine
+easyocr
+
+# Note: Karrot requires VODER to be installed first.
+# VODER repository: https://github.com/HAKORADev/VODER
+# Install VODER and its dependencies before using Karrot.
+
+# System Dependencies (not pip packages):
+# - spectacle (KDE screenshot tool)
+# - wl-clipboard (for wl-copy, Wayland clipboard)
+# - Python 3.x
+# - Audio player: paplay, aplay, ffplay, or mpv
