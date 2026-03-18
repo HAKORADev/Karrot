@@ -1,9 +1,11 @@
+#v0.6.5
 import easyocr
 import subprocess
 import os
 import re
 import shutil
 import gc
+import sys
 import configparser
 from datetime import datetime
 
@@ -266,7 +268,98 @@ def play_audio(audio_path):
     print("No audio player found! Install paplay, aplay, ffplay, or mpv.")
     return False
 
-def run_karrot():
+def process_text(text, config):
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    ocr_file_path = os.path.join(OCR_DIR, f"karrot_{timestamp}.txt")
+    with open(ocr_file_path, "w") as f:
+        f.write(text)
+    print(f"Text saved to: {ocr_file_path}")
+
+    subprocess.run(["wl-copy"], input=text.encode())
+    print("Text copied to clipboard.")
+
+    if not text.strip() or text == "[No text detected]":
+        subprocess.run(["notify-send", "Karrot Complete", "No text to narrate."])
+        print("No text to narrate.")
+        return
+
+    print(f"\n[3/4] Narrating with VODER ({config['mode']} mode)...")
+    subprocess.run(["notify-send", "Karrot", f"Generating narration ({config['mode']} mode)..."])
+
+    voder_output = None
+
+    if config['mode'] == 'vc' and config['voice_path']:
+        voder_output = call_voder_vc(
+            config['voder_path'],
+            text,
+            config['voice_path']
+        )
+    else:
+        voder_output = call_voder_tts(
+            config['voder_path'],
+            text,
+            config['voice_prompt']
+        )
+
+    if voder_output is None:
+        print("Failed to generate narration!")
+        subprocess.run(["notify-send", "Karrot Error", "Failed to generate narration!"])
+        return
+
+    narrator_file_path = os.path.join(NARRATOR_DIR, f"karrot_{timestamp}.wav")
+
+    if os.path.exists(voder_output):
+        shutil.move(voder_output, narrator_file_path)
+        print(f"Audio moved to: {narrator_file_path}")
+    else:
+        print(f"VODER output not found at: {voder_output}")
+        subprocess.run(["notify-send", "Karrot Error", "Audio generation failed!"])
+        return
+
+    print("\n[4/4] Playing narration...")
+    subprocess.run(["notify-send", "Karrot", "Playing narration..."])
+    play_audio(narrator_file_path)
+
+    subprocess.run([
+        "notify-send",
+        "Karrot Complete",
+        f"Text: {ocr_file_path}\nAudio: {narrator_file_path}"
+    ])
+
+    print(f"\n{'='*50}")
+    print("✓ KARROT COMPLETE!")
+    print(f"{'='*50}")
+    print(f"  Text:   {ocr_file_path}")
+    print(f"  Audio:  {narrator_file_path}")
+
+def run_karrot_ocr(config):
+    print("\n[1/4] Selection mode active...")
+    subprocess.run(["spectacle", "-r", "-b", "-n", "-o", TEMP_IMAGE])
+
+    if not os.path.exists(TEMP_IMAGE):
+        print("Operation cancelled by user.")
+        return
+
+    print("\n[2/4] Processing with OCR...")
+    text = run_ocr(TEMP_IMAGE)
+
+    os.remove(TEMP_IMAGE)
+    print("Temp image removed.")
+
+    process_text(text, config)
+
+def run_karrot_text(text_input, config):
+    print("\n[1/4] Text input mode...")
+    print("\n[2/4] Processing text...")
+
+    text = text_input.replace('\\n', '\n')
+
+    print(f"Received {len(text)} chars, {text.count(chr(10)) + 1} lines")
+
+    process_text(text, config)
+
+def main():
     ensure_directories()
 
     config = load_config()
@@ -304,82 +397,11 @@ def run_karrot():
     if config['using_fallback_voice_path']:
         print("  [Using fallback - voice_path invalid, switched to tts]")
 
-    print("\n[1/4] Selection mode active...")
-    subprocess.run(["spectacle", "-r", "-b", "-n", "-o", TEMP_IMAGE])
-
-    if not os.path.exists(TEMP_IMAGE):
-        print("Operation cancelled by user.")
-        return
-
-    print("\n[2/4] Processing with OCR...")
-    final_text = run_ocr(TEMP_IMAGE)
-
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-    ocr_file_path = os.path.join(OCR_DIR, f"karrot_{timestamp}.txt")
-    with open(ocr_file_path, "w") as f:
-        f.write(final_text)
-    print(f"OCR saved to: {ocr_file_path}")
-
-    subprocess.run(["wl-copy"], input=final_text.encode())
-    print("Text copied to clipboard.")
-
-    os.remove(TEMP_IMAGE)
-    print("Temp image removed.")
-
-    if final_text == "[No text detected]":
-        subprocess.run(["notify-send", "Karrot Complete", "No text detected in selection."])
-        print("No text to narrate.")
-        return
-
-    print(f"\n[3/4] Narrating with VODER ({config['mode']} mode)...")
-    subprocess.run(["notify-send", "Karrot", f"Generating narration ({config['mode']} mode)..."])
-
-    voder_output = None
-
-    if config['mode'] == 'vc' and config['voice_path']:
-        voder_output = call_voder_vc(
-            config['voder_path'],
-            final_text,
-            config['voice_path']
-        )
+    if len(sys.argv) > 1:
+        text_input = " ".join(sys.argv[1:])
+        run_karrot_text(text_input, config)
     else:
-        voder_output = call_voder_tts(
-            config['voder_path'],
-            final_text,
-            config['voice_prompt']
-        )
-
-    if voder_output is None:
-        print("Failed to generate narration!")
-        subprocess.run(["notify-send", "Karrot Error", "Failed to generate narration!"])
-        return
-
-    narrator_file_path = os.path.join(NARRATOR_DIR, f"karrot_{timestamp}.wav")
-
-    if os.path.exists(voder_output):
-        shutil.move(voder_output, narrator_file_path)
-        print(f"Audio moved to: {narrator_file_path}")
-    else:
-        print(f"VODER output not found at: {voder_output}")
-        subprocess.run(["notify-send", "Karrot Error", "Audio generation failed!"])
-        return
-
-    print("\n[4/4] Playing narration...")
-    subprocess.run(["notify-send", "Karrot", "Playing narration..."])
-    play_audio(narrator_file_path)
-
-    subprocess.run([
-        "notify-send",
-        "Karrot Complete",
-        f"OCR: {ocr_file_path}\nAudio: {narrator_file_path}"
-    ])
-
-    print(f"\n{'='*50}")
-    print("✓ KARROT COMPLETE!")
-    print(f"{'='*50}")
-    print(f"  OCR:    {ocr_file_path}")
-    print(f"  Audio:  {narrator_file_path}")
+        run_karrot_ocr(config)
 
 if __name__ == "__main__":
-    run_karrot()
+    main()
