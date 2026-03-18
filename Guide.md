@@ -1,6 +1,6 @@
 # Karrot Documentation Guide
 
-**Version:** 0.6.0  
+**Version:** 0.6.5  
 **Last Updated:** March 19, 2026
 
 ---
@@ -9,20 +9,21 @@
 
 1. [Introduction](#introduction)
 2. [What is Karrot?](#what-is-karrot)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Configuration](#configuration)
-6. [Usage](#usage)
-7. [How It Works](#how-it-works)
-8. [Output Files](#output-files)
-9. [Troubleshooting](#troubleshooting)
-10. [Dependencies Deep Dive](#dependencies-deep-dive)
+3. [Two Modes of Operation](#two-modes-of-operation)
+4. [Requirements](#requirements)
+5. [Installation](#installation)
+6. [Configuration](#configuration)
+7. [Usage](#usage)
+8. [How It Works](#how-it-works)
+9. [Output Files](#output-files)
+10. [Troubleshooting](#troubleshooting)
+11. [Dependencies Deep Dive](#dependencies-deep-dive)
 
 ---
 
 ## Introduction
 
-Karrot is a KDE Desktop Environment narrator tool that captures text from your screen and narrates it aloud using AI-powered text-to-speech. The name "Karrot" combines "K" (for KDE) with "arrot" (from parrot, which repeats words) - perfectly describing what this tool does.
+Karrot is a KDE Desktop Environment narrator tool that captures text from your screen or clipboard and narrates it aloud using AI-powered text-to-speech. The name "Karrot" combines "K" (for KDE) with "arrot" (from parrot, which repeats words) - perfectly describing what this tool does.
 
 **Key Philosophy:**
 - **KDE-First:** Designed specifically for the KDE Plasma desktop environment
@@ -34,13 +35,20 @@ Karrot is a KDE Desktop Environment narrator tool that captures text from your s
 
 ## What is Karrot?
 
-Karrot is a screen narrator that performs the following workflow:
+Karrot is a screen and text narrator that supports two input modes:
 
+### OCR Mode (Screenshot)
 1. **Region Selection:** Uses KDE's Spectacle tool to let you select a screen region
 2. **Text Extraction:** Uses EasyOCR to extract text from the captured image
 3. **Clipboard Copy:** Automatically copies extracted text to your clipboard
 4. **Audio Generation:** Calls VODER to generate narration using TTS or Voice Cloning
 5. **Playback:** Plays the generated audio using your system's audio player
+
+### Text Mode (Clipboard)
+1. **Text Input:** Reads text directly from command line/clipboard
+2. **Clipboard Copy:** Text is preserved in clipboard
+3. **Audio Generation:** Calls VODER to generate narration
+4. **Playback:** Plays the generated audio
 
 **Use Cases:**
 - Reading articles while resting your eyes
@@ -48,6 +56,71 @@ Karrot is a screen narrator that performs the following workflow:
 - Multitasking - listen to content while doing other work
 - Language learning - hear text pronounced clearly
 - Content creation - generate voiceovers from screen text
+- **Long articles** - Narrate entire documents without multiple screenshots
+- **E-books and PDFs** - Copy text and listen immediately
+
+---
+
+## Two Modes of Operation
+
+Karrot v0.6.5 introduces two distinct modes for maximum flexibility:
+
+### Mode 1: OCR Mode (Screenshot)
+
+**When to use:** Text cannot be selected or copied
+- Text embedded in images
+- Text in videos
+- Scanned documents
+- Non-selectable PDFs
+- UI elements without copy functionality
+
+**Hotkey:** `Ctrl+Alt+N`
+
+**Command:**
+```bash
+python /path/to/Karrot/src/karrot.py
+```
+
+**Workflow:**
+1. Press hotkey
+2. Spectacle opens for region selection
+3. Select area containing text
+4. OCR extracts text
+5. Audio plays automatically
+
+### Mode 2: Text Mode (Clipboard)
+
+**When to use:** Text is selectable and can be copied
+- Web articles
+- Documents with selectable text
+- Email content
+- Chat messages
+- Code files
+- Any long text content
+
+**Hotkey:** `Ctrl+Alt+M`
+
+**Command:**
+```bash
+python /path/to/Karrot/src/karrot.py "$(wl-paste)"
+```
+
+**Workflow:**
+1. Select and copy text (Ctrl+C)
+2. Press hotkey
+3. Text is read from clipboard
+4. Audio plays immediately (no OCR delay!)
+
+### Comparison Table
+
+| Feature | OCR Mode | Text Mode |
+|---------|----------|-----------|
+| Input | Screenshot | Clipboard text |
+| Requires | Spectacle + OCR | wl-paste |
+| Speed | Slower (OCR processing) | Faster (direct text) |
+| Use case | Non-selectable text | Selectable text |
+| Long text | Multiple captures needed | Single narration |
+| Accuracy | Depends on image quality | 100% (already text) |
 
 ---
 
@@ -191,31 +264,78 @@ voice_path = "/home/user/voice_reference.wav"
 
 ## Usage
 
-### Basic Usage
+### Setting Up Hotkeys (KDE)
 
-1. **Run Karrot:**
-   ```bash
-   python src/karrot.py
-   ```
+Karrot works best with keyboard shortcuts. Set up two hotkeys for both modes:
 
-2. **Select Region:**
-   - Spectacle will open in region selection mode
-   - Click and drag to select the area containing text
-   - Press Enter or double-click to confirm
+1. Open **System Settings** → **Shortcuts**
+2. Click **Edit** → **New** → **Global Shortcut** → **Command/URL**
+3. Create two shortcuts:
 
-3. **Wait for Processing:**
+#### OCR Mode Shortcut
+- **Name:** Karrot OCR
+- **Trigger:** `Ctrl+Alt+N`
+- **Action:** `python /path/to/Karrot/src/karrot.py`
+
+#### Text Mode Shortcut
+- **Name:** Karrot Text
+- **Trigger:** `Ctrl+Alt+M`
+- **Action:** `python /path/to/Karrot/src/karrot.py "$(wl-paste)"`
+
+> **Note:** Replace `/path/to/Karrot` with your actual installation path.
+
+### Using OCR Mode
+
+1. Press `Ctrl+Alt+N` (or run `python src/karrot.py`)
+2. Spectacle opens in region selection mode
+3. Click and drag to select the area containing text
+4. Press Enter or double-click to confirm
+5. Wait for processing:
    - OCR extracts text from the image
    - Text is copied to clipboard
    - VODER generates narration audio
    - Audio plays automatically
 
-4. **Check Results:**
-   - OCR text saved to: `src/results/ocr/karrot_TIMESTAMP.txt`
-   - Audio saved to: `src/results/narrator/karrot_TIMESTAMP.wav`
+### Using Text Mode
+
+1. Select text in any application
+2. Copy to clipboard (`Ctrl+C`)
+3. Press `Ctrl+Alt+M`
+4. Wait for narration:
+   - Text is read from clipboard
+   - VODER generates narration
+   - Audio plays automatically
+
+### Example Scenarios
+
+#### Scenario 1: Text in a YouTube Video
+```
+1. Pause video at the frame with text
+2. Press Ctrl+Alt+N (OCR mode)
+3. Select the text area
+4. Listen to the extracted text
+```
+
+#### Scenario 2: Long Web Article
+```
+1. Select all text (Ctrl+A)
+2. Copy (Ctrl+C)
+3. Press Ctrl+Alt+M (Text mode)
+4. Listen to the entire article!
+```
+
+#### Scenario 3: PDF Document
+```
+If text is selectable:
+  - Copy text → Ctrl+Alt+M
+
+If text is NOT selectable (scanned PDF):
+  - Ctrl+Alt+N → Select region
+```
 
 ### Creating a Desktop Entry (Optional)
 
-Create a `.desktop` file for easy access:
+Create a `.desktop` file for easy access from the application menu:
 
 ```bash
 nano ~/.local/share/applications/karrot.desktop
@@ -224,8 +344,8 @@ nano ~/.local/share/applications/karrot.desktop
 Content:
 ```ini
 [Desktop Entry]
-Name=Karrot
-Comment=KDE Screen Narrator
+Name=Karrot OCR
+Comment=KDE Screen Narrator (OCR Mode)
 Exec=python /path/to/Karrot/src/karrot.py
 Icon=/path/to/Karrot/logo.png
 Terminal=false
@@ -233,11 +353,17 @@ Type=Application
 Categories=Utility;Accessibility;
 ```
 
-### Setting a Keyboard Shortcut (KDE)
-
-1. Open **System Settings** → **Shortcuts**
-2. Click **Add Application** → Select Karrot
-3. Set your preferred shortcut (e.g., `Meta+K`)
+For Text mode, create a second entry:
+```ini
+[Desktop Entry]
+Name=Karrot Text
+Comment=KDE Text Narrator (Clipboard Mode)
+Exec=bash -c 'python /path/to/Karrot/src/karrot.py "$(wl-paste)"'
+Icon=/path/to/Karrot/logo.png
+Terminal=false
+Type=Application
+Categories=Utility;Accessibility;
+```
 
 ---
 
@@ -246,64 +372,106 @@ Categories=Utility;Accessibility;
 ### Workflow Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        KARROT WORKFLOW                       │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        KARROT WORKFLOW (v0.6.5)                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 
-[Start] → [Spectacle Region Select] → [Image Saved to /tmp]
-                                              │
-                                              ▼
-         [EasyOCR Text Extraction] ← ───────────
-                  │
-                  ▼
-         [Text to Clipboard (wl-copy)]
-                  │
-                  ▼
-         [Save OCR to results/ocr/]
-                  │
-                  ▼
-         ┌────────────────┐
-         │  Mode Selection│
-         └────────┬───────┘
-                  │
-         ┌────────┴────────┐
-         ▼                 ▼
-    [TTS Mode]        [VC Mode]
-         │                 │
-         ▼                 ▼
-    [voice_prompt]    [voice_path]
-         │                 │
-         └────────┬────────┘
-                  ▼
-         [Call VODER for Audio]
-                  │
-                  ▼
-         [Save to results/narrator/]
-                  │
-                  ▼
-         [Play Audio (paplay/aplay/etc)]
-                  │
-                  ▼
-              [Complete]
+                              [Start]
+                                 │
+                 ┌───────────────┴───────────────┐
+                 │      Check sys.argv           │
+                 └───────────────┬───────────────┘
+                                 │
+          ┌──────────────────────┴──────────────────────┐
+          │                                             │
+   [No Arguments]                              [Arguments Provided]
+          │                                             │
+          ▼                                             ▼
+   ┌──────────────┐                           ┌──────────────────┐
+   │   OCR MODE   │                           │    TEXT MODE     │
+   │  (Ctrl+Alt+N)│                           │   (Ctrl+Alt+M)   │
+   └──────┬───────┘                           └────────┬─────────┘
+          │                                            │
+          ▼                                            ▼
+[Spectacle Region Select]                    [Read from Clipboard]
+          │                                            │
+          ▼                                            │
+   [Save Image]                                       │
+          │                                            │
+          ▼                                            │
+  [EasyOCR Extraction]                                 │
+          │                                            │
+          └─────────────────┬──────────────────────────┘
+                            │
+                            ▼
+                [Process Text & Save to results/ocr/]
+                            │
+                            ▼
+                  [Copy to Clipboard (wl-copy)]
+                            │
+                            ▼
+                   ┌────────────────┐
+                   │  Voice Mode    │
+                   └────────┬───────┘
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+            [TTS Mode]           [VC Mode]
+                 │                     │
+                 ▼                     ▼
+           [voice_prompt]        [voice_path]
+                 │                     │
+                 └──────────┬──────────┘
+                            ▼
+                 [Call VODER for Audio]
+                            │
+                            ▼
+              [Save to results/narrator/]
+                            │
+                            ▼
+              [Play Audio (paplay/aplay/etc)]
+                            │
+                            ▼
+                        [Complete]
 ```
 
 ### Technical Details
 
+#### Mode Detection
+- Karrot checks `sys.argv` at startup
+- If no arguments: OCR mode (screenshot + OCR)
+- If arguments provided: Text mode (direct text input)
+- Text mode uses `$(wl-paste)` to read clipboard content
+
+#### OCR Mode Specifics
 1. **Spectacle Integration:**
    - Called with `-r` (region mode), `-b` (background), `-n` (no notifications), `-o` (output path)
    - Creates temporary image at `/tmp/karrot_snippet.png`
+   - Image deleted after processing
 
 2. **OCR Processing:**
    - Uses EasyOCR with English language model
    - GPU acceleration disabled by default (set `gpu=True` in code to enable)
    - Model loaded and unloaded per session to save memory
 
-3. **VODER Integration:**
+#### Text Mode Specifics
+1. **Input Handling:**
+   - Accepts text from command line arguments
+   - Handles escape sequences (`\\n` → `\n`)
+   - No temporary files created
+
+2. **Speed Advantage:**
+   - No OCR model loading
+   - No image capture
+   - Direct text processing
+
+#### Shared Processing (Both Modes)
+1. **VODER Integration:**
    - Text prefixed with character name: `Karrot: {text}`
    - Voice prompt also prefixed: `Karrot: {voice_prompt}`
    - Output parsed to find generated audio path
 
-4. **Audio Playback:**
+2. **Audio Playback:**
    - Tries multiple players in order: paplay, aplay, ffplay, mpv
    - First successful player is used
 
@@ -313,11 +481,13 @@ Categories=Utility;Accessibility;
 
 Karrot creates two types of output files, organized in the `src/results/` directory:
 
-### OCR Results (`src/results/ocr/`)
+### Text Files (`src/results/ocr/`)
 
 - **Format:** Plain text files (`.txt`)
 - **Naming:** `karrot_YYYY-MM-DD_HH-MM-SS.txt`
-- **Content:** Extracted text from the screenshot
+- **Content:** 
+  - OCR Mode: Extracted text from screenshot
+  - Text Mode: Clipboard text that was narrated
 - **Example:** `karrot_2026-03-19_14-30-45.txt`
 
 ### Narrator Audio (`src/results/narrator/`)
@@ -408,6 +578,41 @@ sudo pacman -S mpv
 - Try running Spectacle manually: `spectacle -r`
 - Check KDE/Qt environment variables
 
+#### Text mode not working (Ctrl+Alt+M)
+
+**Problem:** Text mode hotkey doesn't work or shows empty text.  
+**Solutions:**
+- Ensure text is copied to clipboard before pressing the hotkey
+- Check wl-clipboard is installed: `wl-paste --help`
+- Test manually: `python src/karrot.py "test text"`
+- Verify the hotkey command includes `$(wl-paste)` with proper quotes
+
+#### Clipboard is empty in text mode
+
+**Problem:** Karrot reports no text when using text mode.  
+**Solutions:**
+- Copy text first (Ctrl+C in the source application)
+- Test clipboard content: `wl-paste`
+- Some applications don't use the standard Wayland clipboard
+- Try using OCR mode instead for non-standard applications
+
+#### Hotkey doesn't trigger Karrot
+
+**Problem:** Keyboard shortcut is set but nothing happens.  
+**Solutions:**
+- Check for conflicting shortcuts in KDE settings
+- Verify the command path is correct (use absolute path)
+- Test the command manually in a terminal
+- Ensure Python is in your PATH
+
+#### Long text causes VODER to fail
+
+**Problem:** Very long texts cause issues.  
+**Solutions:**
+- VODER has text length limits
+- Split long articles into smaller sections
+- For extremely long content, consider using a dedicated TTS tool
+
 ### Debug Mode
 
 For more verbose output, run Karrot directly in a terminal:
@@ -451,10 +656,12 @@ Spectacle is KDE's default screenshot application with powerful region selection
 
 ### wl-clipboard
 
-Wayland clipboard utilities for copying text to the system clipboard.
+Wayland clipboard utilities for clipboard operations.
 
 - **Repository:** https://github.com/bugaevc/wl-clipboard
-- **Used:** `wl-copy` command to copy OCR text to clipboard
+- **Used in Karrot:**
+  - `wl-copy`: Copies OCR text to clipboard (both modes)
+  - `wl-paste`: Reads clipboard content for Text mode
 
 ---
 

@@ -7,7 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## v0.6.0 - 2026-03-19
+## [0.6.5] - 2026-03-19
+
+### Added
+
+- **Text Input Mode** - Direct text narration without OCR
+  - Accept text from command line arguments
+  - Perfect for long articles and documents
+  - Use with `python karrot.py "$(wl-paste)"` to narrate clipboard content
+- **Dual Hotkey Support** - Two modes for different use cases:
+  - `Ctrl+Alt+N` → OCR Mode (screenshot + text extraction)
+  - `Ctrl+Alt+M` → Text Mode (clipboard narration)
+- **Long Text Support** - Narrate entire articles without multiple screenshots
+- **Escape Sequence Handling** - Proper `\n` conversion in text input
+
+### Changed
+
+- **Refactored Architecture** - Modular design for both input modes
+  - New `process_text()` function for shared text processing
+  - New `run_karrot_ocr()` for screenshot/OCR mode
+  - New `run_karrot_text()` for direct text input mode
+  - Refactored `main()` to detect mode from command line arguments
+- **Improved Workflow** - Skip unnecessary steps in text mode
+  - No Spectacle launch in text mode
+  - No OCR processing for direct text input
+
+### Use Cases
+
+| Scenario | Mode | Hotkey |
+|----------|------|--------|
+| Text in image/video | OCR | Ctrl+Alt+N |
+| Selectable text (short) | Text | Copy → Ctrl+Alt+M |
+| Selectable text (long article) | Text | Copy → Ctrl+Alt+M |
+| PDF with selectable text | Text | Copy → Ctrl+Alt+M |
+| PDF as image | OCR | Ctrl+Alt+N |
+
+---
+
+## [0.6.0] - 2026-03-19
 
 ### Added
 
