@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.6.0] - 2026-03-19
+## v0.6.0 - 2026-03-19
 
 ### Added
 
@@ -51,19 +51,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Temporary file management (auto-cleanup)
 
 ---
-
-## Future Roadmap
-
-### Planned Features
-
-- GUI configuration editor
-- Multiple language OCR support
-- Batch processing mode
-- Custom hotkey support
-- Audio playback speed control
-- Integration with other screenshot tools
-- X11 session support
-
----
-
-[0.6.0]: https://github.com/HAKORADev/Karrot/releases/tag/v0.6.0
