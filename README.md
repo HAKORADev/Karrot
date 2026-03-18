@@ -8,7 +8,7 @@
 
 ## What is Karrot?
 
-**Karrot** = **K** (KDE) + **arrot** (Parrot) 
+**Karrot**
 
 Like a parrot that repeats words, Karrot captures text from your screen and narrates it aloud. It's a KDE-first, Linux-exclusive accessibility tool designed for the KDE Plasma desktop environment.
 
