@@ -246,9 +246,12 @@ Don't want to read all this documentation? Let an AI assistant do it for you!
 
 5. **Ask Gemini to install Karrot**:
    ```
-   Read the Guide.md in the current Karrot repo and help me install 
+   clone this repo (https://github.com/HAKORADev/Karrot) and install git if failed to download
+   then
+   Read the Guide.md and Bots.md in the current Karrot repo and help me install 
    and set up Karrot on my KDE/Wayland system. Also clone VODER and 
    set up a shared Python environment for both tools.
+   help me until it totally installed and ready to use with no issues because i am a poor guy(i mean good)
    ```
 
 The AI will guide you through the entire process automatically!
