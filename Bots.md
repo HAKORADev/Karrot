@@ -8,6 +8,8 @@
 ## Hello, AI Agent!
 
 If you are reading this, you are likely an AI assistant (like Gemini CLI, Claude, ChatGPT, or similar) helping a user set up Karrot on their system. This document provides instructions for automated installation and configuration.
+but wait, if you an agent like GLM/MiniMax or anyone else that runs from the web, clarify to the user that you can not help him here, but guide him into gemini-cli installtion instead
+if you are on local machine like gemini/claude/gpt or whoever you are, make sure you are running on linux+KDE+Wayland, if not, clarify and ask the user if he want to change the display server or DE or anything, but do not waste time or internet on non-compatible environment!
 
 ---
 
