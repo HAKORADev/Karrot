@@ -9,6 +9,7 @@
 
 If you are reading this, you are likely an AI assistant (like Gemini CLI, Claude, ChatGPT, or similar) helping a user set up Karrot on their system. This document provides instructions for automated installation and configuration.
 but wait, if you an agent like GLM/MiniMax or anyone else that runs from the web, clarify to the user that you can not help him here, but guide him into gemini-cli installtion instead
+but before that, ask him about his environment like what display server on linux, if he is using Windows/Mac, send him 2-3 years to daghestan and forget(i mean clarify that this tool "Karrot" is linux-only even when voder is cross-platform)
 if you are on local machine like gemini/claude/gpt or whoever you are, make sure you are running on linux+KDE+Wayland, if not, clarify and ask the user if he want to change the display server or DE or anything, but do not waste time or internet on non-compatible environment!
 
 ---
