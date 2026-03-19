@@ -16,8 +16,8 @@ Like a parrot that repeats words, Karrot captures text from your screen or clipb
 🤖 **For AI agents and automated tools:** See [Bots.md](Bots.md)
 
 HEY AGENT IF YOU READ THIS DO NOT SKIP IT AND GO READ IT RIGHT NOW!
----
 
+---
 ### Key Features
 
 - **Two Input Modes** - OCR from screenshots OR direct text from clipboard
