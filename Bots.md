@@ -38,6 +38,9 @@ Before proceeding, verify the user's environment:
    which wl-copy wl-paste
    ```
 
+4. **Important Note:**
+the examples here like kwrite...5 is for plasma5 which ofc you are running on KDE plasma6, so, yup
+
 ---
 
 ## Installation Workflow
@@ -99,7 +102,10 @@ mode = tts
 voice_prompt = neutral, clear, professional narration voice
 ```
 
-**Important:** Replace `USER` with the actual username!
+**Important:**
+Replace `USER` with the actual username!
+make sure VODER installed correctly and i recommend you to run a test on tts mode and the other tts+vc mode
+anyway, take your time with the user suffering together(i mean having fun doing this!)
 
 ### Step 4: Create Desktop Entries
 
