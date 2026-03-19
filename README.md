@@ -162,6 +162,7 @@ src/results/
 
 - **[Guide.md](Guide.md)** - Complete documentation and troubleshooting
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
+- **[Bots.md](Bots.md)** - For AI agents and bots (automated setup)
 
 ---
 

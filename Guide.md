@@ -12,12 +12,13 @@
 3. [Two Modes of Operation](#two-modes-of-operation)
 4. [Requirements](#requirements)
 5. [Installation](#installation)
-6. [Configuration](#configuration)
-7. [Usage](#usage)
-8. [How It Works](#how-it-works)
-9. [Output Files](#output-files)
-10. [Troubleshooting](#troubleshooting)
-11. [Dependencies Deep Dive](#dependencies-deep-dive)
+6. ["Silly Way" Setup (Using AI Assistant)](#silly-way-setup-using-ai-assistant)
+7. [Configuration](#configuration)
+8. [Usage](#usage)
+9. [How It Works](#how-it-works)
+10. [Output Files](#output-files)
+11. [Troubleshooting](#troubleshooting)
+12. [Dependencies Deep Dive](#dependencies-deep-dive)
 
 ---
 
@@ -211,6 +212,46 @@ python src/karrot.py
 ```
 
 This will create `src/karrot.conf`. Edit this file to set your VODER path.
+
+---
+
+## "Silly Way" Setup (Using AI Assistant)
+
+Don't want to read all this documentation? Let an AI assistant do it for you!
+
+### Using Gemini CLI
+
+1. **Install Node.js** (if not already installed):
+   ```bash
+   # Arch Linux
+   sudo pacman -S nodejs npm
+   
+   # Debian/Ubuntu
+   sudo apt install nodejs npm
+   ```
+
+2. **Install Gemini CLI**:
+   ```bash
+   npm install -g @google/gemini-cli
+   ```
+
+3. **Run Gemini**:
+   ```bash
+   gemini
+   ```
+
+4. **Login via Web**:
+   - Select "Sign in with Google (OAuth login using your Google Account)"
+   - Complete the login in your browser
+
+5. **Ask Gemini to install Karrot**:
+   ```
+   Read the Guide.md in the current Karrot repo and help me install 
+   and set up Karrot on my KDE/Wayland system. Also clone VODER and 
+   set up a shared Python environment for both tools.
+   ```
+
+The AI will guide you through the entire process automatically!
 
 ---
 
