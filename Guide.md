@@ -23,7 +23,7 @@
 
 ## Introduction
 
-Karrot is a KDE Desktop Environment narrator tool that captures text from your screen or clipboard and narrates it aloud using AI-powered text-to-speech. The name "Karrot" combines "K" (for KDE) with "arrot" (from parrot, which repeats words) - perfectly describing what this tool does.
+Karrot is a KDE Desktop Environment narrator tool that captures text from your screen or clipboard and narrates it aloud using AI-powered text-to-speech. The name "Karrot" combines "K" (for KDE) with "arrot" (from parrot, which repeats words ofc) - perfectly describing what this tool does.
 
 **Key Philosophy:**
 - **KDE-First:** Designed specifically for the KDE Plasma desktop environment
@@ -74,7 +74,7 @@ Karrot v0.6.5 introduces two distinct modes for maximum flexibility:
 - Non-selectable PDFs
 - UI elements without copy functionality
 
-**Hotkey:** `Ctrl+Alt+N`
+**Hotkey1:**
 
 **Command:**
 ```bash
@@ -98,7 +98,7 @@ python /path/to/Karrot/src/karrot.py
 - Code files
 - Any long text content
 
-**Hotkey:** `Ctrl+Alt+M`
+**Hotkey2:**
 
 **Command:**
 ```bash
@@ -274,12 +274,12 @@ Karrot works best with keyboard shortcuts. Set up two hotkeys for both modes:
 
 #### OCR Mode Shortcut
 - **Name:** Karrot OCR
-- **Trigger:** `Ctrl+Alt+N`
+- **Trigger:** `e.g Ctrl+Alt+N`
 - **Action:** `python /path/to/Karrot/src/karrot.py`
 
 #### Text Mode Shortcut
 - **Name:** Karrot Text
-- **Trigger:** `Ctrl+Alt+M`
+- **Trigger:** `e.g Ctrl+Alt+M`
 - **Action:** `python /path/to/Karrot/src/karrot.py "$(wl-paste)"`
 
 > **Note:** Replace `/path/to/Karrot` with your actual installation path.
