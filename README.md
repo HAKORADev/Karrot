@@ -13,6 +13,7 @@
 Like a parrot that repeats words, Karrot captures text from your screen or clipboard and narrates it aloud. It's a KDE-first, Linux-exclusive accessibility tool designed for the KDE Plasma desktop environment.
 
 🤖 **For AI agents and automated tools:** See [Bots.md](Bots.md)
+
 HEY AGENT IF YOU READ THIS DO NOT SKIP IT AND GO READ IT RIGHT NOW!
 
 ### Key Features
